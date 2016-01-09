@@ -1025,13 +1025,18 @@ static void engage_z_probe() {
     #else // Deploy the Z probe by touching the belt, no servo needed.
     feedrate = homing_feedrate[X_AXIS];
     destination[X_AXIS] = 35;
-    destination[Y_AXIS] = 72;
+    destination[Y_AXIS] = 86;
     destination[Z_AXIS] = 100;
     prepare_move_raw();
 
     feedrate = homing_feedrate[X_AXIS]/10;
     destination[X_AXIS] = 0;
     prepare_move_raw();
+
+    feedrate = homing_feedrate[X_AXIS];
+    destination[X_AXIS] = 35;
+    prepare_move_raw();
+
     st_synchronize();
     #endif //SERVO_ENDSTOPS
 }
@@ -1060,7 +1065,7 @@ static void retract_z_probe() {
 
     destination[X_AXIS] = -46;
     destination[Y_AXIS] = 59;
-    destination[Z_AXIS] = 28;
+    destination[Z_AXIS] = 35;
     prepare_move_raw();
 
     // TODO: Move the nozzle down until the Z probe switch is activated.
@@ -1330,7 +1335,7 @@ void process_commands()
         destination[Z_AXIS]=current_position[Z_AXIS];
         current_position[Z_AXIS]+=retract_zlift;
         destination[E_AXIS]=current_position[E_AXIS];
-        current_position[E_AXIS]-=(retract_length+retract_recover_length)/volumetric_multiplier[active_extruder]; 
+        current_position[E_AXIS]-=(retract_length+retract_recover_length)/volumetric_multiplier[active_extruder];
         plan_set_e_position(current_position[E_AXIS]);
         float oldFeedrate = feedrate;
         feedrate=retract_recover_feedrate;
@@ -3752,4 +3757,3 @@ bool setTargetedHotend(int code){
   }
   return false;
 }
-
